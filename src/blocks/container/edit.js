@@ -54,6 +54,8 @@ import {
 	AlignmentToolbar,
 	InspectorAdvancedControls,
 	BlockControls,
+	getColorClassName,
+	getColorObjectByColorValue,
 } from '@wordpress/block-editor';
 
 import {
@@ -416,11 +418,23 @@ class GenerateBlockContainer extends Component {
 			} );
 		} );
 
+		let backgroundColorClass = '';
+		const colors = wp.data.select( 'core/editor' ).getEditorSettings().colors;
+
+		if ( 'undefined' !== typeof colors && colors.length > 0 ) {
+			const colorObject = getColorObjectByColorValue( colors, backgroundColor );
+
+			if ( 'object' === typeof colorObject ) {
+				backgroundColorClass = getColorClassName( 'background-color', colorObject.name );
+			}
+		}
+
 		let htmlAttributes = {
 			className: classnames( {
 				'gb-container': true,
 				[ `gb-container-${ uniqueId }` ]: true,
 				[ `${ className }` ]: undefined !== className,
+				[ backgroundColorClass ]: backgroundColorClass,
 			} ),
 			id: anchor ? anchor : null,
 		};
