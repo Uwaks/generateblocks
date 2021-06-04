@@ -114,10 +114,16 @@ class GenerateBlockContainer extends Component {
 			} );
 		}
 
-		// Set our inner z-index if we're using a gradient overlay.
+		// Set our inner z-index if we're using a gradient overlay or pseudo background.
 		// @since 1.4.0.
 		if ( 'undefined' === typeof this.props.attributes.blockVersion || this.props.attributes.blockVersion < 2 ) {
-			if ( this.props.attributes.gradient && 'pseudo-element' === this.props.attributes.gradientSelector && ! hasNumericValue( this.props.attributes.innerZindex ) ) {
+			let updateOldZindex = this.props.attributes.gradient && 'pseudo-element' === this.props.attributes.gradientSelector && ! hasNumericValue( this.props.attributes.innerZindex );
+
+			if ( ! updateOldZindex ) {
+				updateOldZindex = !! this.props.attributes.bgImage && 'undefined' !== typeof this.props.attributes.bgOptions.selector && 'pseudo-element' === this.props.attributes.bgOptions.selector;
+			}
+
+			if ( updateOldZindex ) {
 				this.props.setAttributes( {
 					innerZindex: 1,
 				} );
@@ -239,7 +245,6 @@ class GenerateBlockContainer extends Component {
 			fontFamily,
 			googleFont,
 			googleFontVariants,
-			fullWidthContent,
 			align,
 			shapeDividers,
 		} = attributes;
@@ -260,61 +265,6 @@ class GenerateBlockContainer extends Component {
 			{ label: 'footer', value: 'footer' },
 			{ label: 'aside', value: 'aside' },
 		];
-
-		const pageBuilderContainerOption = document.getElementById( '_generate-full-width-content' );
-		const changeEvent = new Event( 'change' ); // eslint-disable-line no-undef
-		const getRootId = wp.data.select( 'core/block-editor' ).getBlockHierarchyRootClientId( clientId );
-		const isRootContainer = getRootId === clientId;
-
-		const fullWidthContentOptions = () => {
-			return (
-				<Fragment>
-					{ generateBlocksInfo.isGeneratePress && isRootContainer && pageBuilderContainerOption &&
-						<BaseControl
-							id="gblocks-gp-full-width-page"
-							label={ __( 'If you want to build a full width page, use the option below to remove the page width, margin and padding.', 'generateblocks' ) }
-							className="gblocks-gpress-full-width"
-						>
-							<ToggleControl
-								label={ __( 'Make page full-width', 'generateblocks' ) }
-								checked={ fullWidthContent ? true : false }
-								onChange={ ( value ) => {
-									if ( value ) {
-										if ( 'select' === pageBuilderContainerOption.tagName.toLowerCase() ) {
-											pageBuilderContainerOption.value = 'true';
-											pageBuilderContainerOption.dispatchEvent( changeEvent );
-										} else {
-											pageBuilderContainerOption.checked = true;
-											pageBuilderContainerOption.setAttribute( 'value', 'true' );
-											pageBuilderContainerOption.dispatchEvent( changeEvent );
-										}
-
-										setAttributes( {
-											fullWidthContent: 'true',
-											align: '',
-										} );
-									} else {
-										if ( 'select' === pageBuilderContainerOption.tagName.toLowerCase() ) {
-											pageBuilderContainerOption.value = '';
-											pageBuilderContainerOption.dispatchEvent( changeEvent );
-										} else {
-											pageBuilderContainerOption.checked = false;
-											pageBuilderContainerOption.setAttribute( 'value', '' );
-											document.querySelector( 'input[name="_generate-full-width-content"]#default-content' ).checked = true;
-											pageBuilderContainerOption.dispatchEvent( changeEvent );
-										}
-
-										setAttributes( {
-											fullWidthContent: '',
-										} );
-									}
-								} }
-							/>
-						</BaseControl>
-					}
-				</Fragment>
-			);
-		};
 
 		let googleFontsAttr = '';
 
@@ -578,8 +528,6 @@ class GenerateBlockContainer extends Component {
 									/>
 
 									{ applyFilters( 'generateblocks.editor.controls', '', 'containerAfterElementTag', this.props, this.state ) }
-
-									{ fullWidthContentOptions() }
 								</Fragment>
 							}
 
@@ -1769,6 +1717,12 @@ class GenerateBlockContainer extends Component {
 															selector: value,
 														},
 													} );
+
+													if ( 'pseudo-element' === value && ! innerZindex && 0 !== innerZindex ) {
+														setAttributes( {
+															innerZindex: 1,
+														} );
+													}
 												} }
 											/>
 
@@ -1783,6 +1737,12 @@ class GenerateBlockContainer extends Component {
 															selector: 'pseudo-element',
 														},
 													} );
+
+													if ( ! innerZindex && 0 !== innerZindex ) {
+														setAttributes( {
+															innerZindex: 1,
+														} );
+													}
 												} }
 												min={ 0 }
 												max={ 1 }

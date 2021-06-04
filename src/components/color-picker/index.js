@@ -20,6 +20,7 @@ import {
 	RangeControl,
 	Popover,
 	Button,
+	TextControl,
 } from '@wordpress/components';
 
 import {
@@ -111,13 +112,58 @@ export default class GenerateBlocksColorPicker extends Component {
 									key={ colorKey }
 									color={ value ? value : '' }
 									onChangeComplete={ ( color ) => {
-										onChange( color.hex );
+										let colorString;
+
+										if ( 'undefined' === typeof color.rgb || color.rgb.a === 1 ) {
+											colorString = color.hex;
+										} else {
+											const { r, g, b, a } = color.rgb;
+											colorString = `rgba(${ r }, ${ g }, ${ b }, ${ a })`;
+										}
+
+										onChange( colorString );
 									} }
-									disableAlpha
+									disableAlpha={ ! alpha || 1 !== valueOpacity }
 								/>
+
+								<div className="gblocks-color-input-wrapper">
+									<TextControl
+										className="gblocks-color-input"
+										type={ 'text' }
+										value={ value || '' }
+										onChange={ ( color ) => {
+											onChange( color );
+										} }
+										onBlur={ () => {
+											this.setState( {
+												colorKey: value,
+											} );
+										} }
+									/>
+
+									<Button
+										isSmall
+										isSecondary
+										className="components-color-clear-color"
+										onClick={ () => {
+											onChange( '' );
+											onOpacityChange( 1 );
+
+											this.setState( {
+												colorKey: false,
+											} );
+
+											setTimeout( function() {
+												document.querySelector( '.gblocks-color-input-wrapper input' ).focus();
+											}, 10 );
+										} }
+									>
+										{ __( 'Clear Color', 'generateblocks' ) }
+									</Button>
+								</div>
 							</BaseControl>
 
-							{ alpha &&
+							{ alpha && 1 !== valueOpacity &&
 								<div className="gblocks-component-color-opacity">
 									<Tooltip text={ __( 'Opacity', 'generateblocks' ) }>
 										{ getIcon( 'gradient' ) }
@@ -134,22 +180,6 @@ export default class GenerateBlocksColorPicker extends Component {
 								</div>
 							}
 
-							<Button
-								isSmall
-								isSecondary
-								className="components-color-clear-color"
-								onClick={ () => {
-									onChange( '' );
-									onOpacityChange( 1 );
-
-									this.setState( {
-										colorKey: false,
-									} );
-								} }
-							>
-								{ __( 'Clear Color', 'generateblocks' ) }
-							</Button>
-
 							<BaseControl
 								className="gblocks-component-color-picker-palette"
 							>
@@ -161,6 +191,10 @@ export default class GenerateBlocksColorPicker extends Component {
 										this.setState( {
 											colorKey: color,
 										} );
+
+										setTimeout( function() {
+											document.querySelector( '.gblocks-color-input-wrapper input' ).focus();
+										}, 10 );
 									} }
 									disableCustomColors={ true }
 									clearable={ false }

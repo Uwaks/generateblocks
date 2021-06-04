@@ -120,7 +120,11 @@ function generateblocks_do_block_editor_assets() {
 	);
 }
 
-add_filter( 'block_categories', 'generateblocks_do_category' );
+if ( version_compare( $GLOBALS['wp_version'], '5.8-alpha-1', '<' ) ) {
+	add_filter( 'block_categories', 'generateblocks_do_category' );
+} else {
+	add_filter( 'block_categories_all', 'generateblocks_do_category' );
+}
 /**
  * Add GeneratePress category to Gutenberg.
  *
@@ -179,7 +183,13 @@ add_filter( 'generateblocks_css_print_method', 'generateblocks_set_css_print_met
  * @param string $method Existing method.
  */
 function generateblocks_set_css_print_method( $method ) {
-	return generateblocks_get_option( 'css_print_method' );
+	$method = generateblocks_get_option( 'css_print_method' );
+
+	if ( is_single() ) {
+		$method = 'inline';
+	}
+
+	return $method;
 }
 
 add_filter( 'excerpt_allowed_blocks', 'generateblocks_set_excerpt_allowed_blocks' );
