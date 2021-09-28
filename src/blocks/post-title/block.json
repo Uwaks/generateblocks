@@ -1,0 +1,15 @@
+{
+  "apiVersion": 1,
+  "name": "generateblocks/post-title",
+  "title": "Post title",
+  "category": "generateblocks",
+  "description": "Post title",
+  "keywords": [  ],
+  "textdomain": "generateblocks",
+  "usesContext": [ "postId", "postType" ],
+  "supports": {
+	"align": false,
+	"anchor": false,
+	"className": false
+  }
+}

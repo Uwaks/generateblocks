@@ -74,6 +74,13 @@ class GenerateBlocks_Render_Block {
 				'render_callback' => array( $this, 'do_button_container' ),
 			)
 		);
+
+		register_block_type_from_metadata(
+			GENERATEBLOCKS_DIR . '/src/blocks/post-title',
+			array(
+				'render_callback' => array( $this, 'do_post_title_block' ),
+			)
+		);
 	}
 
 	/**
@@ -271,6 +278,108 @@ class GenerateBlocks_Render_Block {
 		$output .= '</div>';
 
 		return $output;
+	}
+
+	/**
+	 * Wrapper function for our dynamic headlines.
+	 *
+	 * @since 1.5.0
+	 * @param string $content The dynamic text to display.
+	 * @param array  $attributes The block attributes.
+	 */
+	public static function do_dynamic_headline( $content, $attributes ) {
+		$defaults = generateblocks_get_block_defaults();
+
+		$settings = wp_parse_args(
+			$attributes,
+			$defaults['headline']
+		);
+
+		$classNames = array(
+			'gb-headline',
+			'gb-headline-' . $settings['uniqueId'],
+		);
+
+		if ( ! empty( $settings['className'] ) ) {
+			$classNames[] = $settings['className'];
+		}
+
+		if ( empty( $settings['dynamicIcon'] ) ) {
+			$classNames[] = 'gb-headline-text';
+		}
+
+		$tagName = apply_filters( 'generateblocks_dynamic_headline_tagname', $settings['element'], $attributes );
+
+		$allowedTagNames = apply_filters(
+			'generateblocks_dynamic_headline_allowed_tagnames',
+			array(
+				'h1',
+				'h2',
+				'h3',
+				'h4',
+				'h5',
+				'h6',
+				'div',
+				'p',
+			),
+			$attributes
+		);
+
+		if ( ! in_array( $tagName, $allowedTagNames ) ) {
+			$tagName = 'div';
+		}
+
+		$output = sprintf(
+			'<%1$s %2$s>',
+			$tagName,
+			generateblocks_attr(
+				'dynamic-headline',
+				array(
+					'id' => isset( $settings['anchor'] ) ? $settings['anchor'] : null,
+					'class' => implode( ' ', $classNames ),
+				),
+				$settings
+			)
+		);
+
+		if ( ! empty( $settings['icon'] ) ) {
+			$output .= sprintf(
+				'<span class="gb-icon">%s</span>',
+				$settings['icon']
+			);
+
+			$output .= '<span class="gb-headline-text">';
+		}
+
+		$output .= $content;
+
+		if ( ! empty( $settings['icon'] ) ) {
+			$output .= '</span>';
+		}
+
+		$output .= sprintf(
+			'</%s>',
+			$tagName
+		);
+
+		return $output;
+	}
+
+	/**
+	 * Output the post title block.
+	 *
+	 * @since 1.5.0
+	 * @param array  $attributes The block attributes.
+	 * @param string $content The inner blocks.
+	 * @param object $block The block data.
+	 */
+	public function do_post_title_block( $attributes, $content, $block ) {
+		if ( ! isset( $block->context['postId'] ) ) {
+			return '';
+		}
+
+		$title = get_the_title( $block->context['postId'] );
+		return self::do_dynamic_headline( $title, $attributes );
 	}
 }
 

@@ -50,6 +50,10 @@ function generateblocks_get_block_data( $content, $data = array(), $depth = 0 ) 
 				$data['headline'][] = $block['attrs'];
 			}
 
+			if ( 'generateblocks/post-title' === $block['blockName'] ) {
+				$data['headline'][] = $block['attrs'];
+			}
+
 			if ( 'generateblocks/button-container' === $block['blockName'] ) {
 				$data['button-container'][] = $block['attrs'];
 			}
