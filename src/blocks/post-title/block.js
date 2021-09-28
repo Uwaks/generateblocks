@@ -7,7 +7,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { useEntityProp } from '@wordpress/core-data';
 
 // Change our icon attribute to a string so it's saved in our attributes.
-Object.assign( headlineAttributes, {
+const attributes = Object.assign( {}, headlineAttributes, {
 	icon: {
 		type: 'string',
 		default: '',
@@ -29,10 +29,10 @@ function EditDynamicHeadline( props ) {
 
 	const newAttributes = Object.assign( {}, attributes, { content: rawTitle } );
 
-	return ( <HeadlineEdit { ...props } attributes={ newAttributes } /> );
-}
+	return ( <HeadlineEdit { ...props } attributes={ newAttributes } renderContent={ true } /> );
+};
 
 registerBlockType( metadata, {
-	attributes: headlineAttributes,
+	attributes,
 	edit: withUniqueId( EditDynamicHeadline ),
 } );

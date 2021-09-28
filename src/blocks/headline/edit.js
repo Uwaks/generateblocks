@@ -154,6 +154,7 @@ class GenerateBlockHeadline extends Component {
 			setAttributes,
 			onReplace,
 			clientId,
+			renderContent = false,
 		} = this.props;
 
 		const {
@@ -251,6 +252,8 @@ class GenerateBlockHeadline extends Component {
 
 			return block;
 		};
+
+		const RichTextComponent = renderContent ? RichText.Content : RichText;
 
 		return (
 			<Fragment>
@@ -1264,7 +1267,7 @@ class GenerateBlockHeadline extends Component {
 
 							{ ! removeText &&
 								<span className="gb-headline-text">
-									<RichText
+									<RichTextComponent
 										tagName="span"
 										value={ content }
 										onChange={ ( value ) => setAttributes( { content: value } ) }
@@ -1279,7 +1282,7 @@ class GenerateBlockHeadline extends Component {
 					}
 
 					{ ! hasIcon && ! removeText &&
-						<RichText
+						<RichTextComponent
 							tagName="span"
 							value={ content }
 							onChange={ ( value ) => setAttributes( { content: value } ) }
