@@ -47,5 +47,10 @@ export default ( props ) => {
 
 	const finalProps = Object.assign( {}, defaultProps, props );
 
-	return ( <Select { ...finalProps } /> );
+	return (
+		<div style={ { marginBottom: '24px' } }>
+			{ finalProps.label && <label htmlFor={ finalProps.id }>{ finalProps.label }</label> }
+			<Select { ...finalProps } />
+		</div>
+	);
 };

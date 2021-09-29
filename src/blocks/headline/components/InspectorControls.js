@@ -11,7 +11,6 @@ import ColorPicker from '../../../components/color-picker';
 import IconPicker from '../../../components/icon-picker';
 import UnitPicker from '../../../components/unit-picker';
 import { InspectorControls } from '@wordpress/block-editor';
-import DynamicDataControl from '../../../components/dynamic-data-control';
 
 export default ( props ) => {
 	const {
@@ -72,8 +71,6 @@ export default ( props ) => {
 	return (
 		<InspectorControls>
 			<ResponsiveTabs { ...props } selectedDevice={ deviceType } onClick={ setDeviceType } />
-
-			<DynamicDataControl />
 
 			<PanelArea
 				{ ...props }

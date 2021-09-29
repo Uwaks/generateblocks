@@ -29,6 +29,7 @@ import {
 } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { createBlock } from '@wordpress/blocks';
+import hasDynamicContent from "../../hoc/hasDynamicContent";
 
 /**
  * Regular expression matching invalid anchor characters for replacement.
@@ -36,6 +37,8 @@ import { createBlock } from '@wordpress/blocks';
  * @type {RegExp}
  */
 const ANCHOR_REGEX = /[\s#]/g;
+
+const InspectorControlsEnhanced = hasDynamicContent( InspectorControls );
 
 class GenerateBlockHeadline extends Component {
 	constructor() {
@@ -183,7 +186,7 @@ class GenerateBlockHeadline extends Component {
 					deviceType={ this.getDeviceType() }
 				/>
 
-				<InspectorControls
+				<InspectorControlsEnhanced
 					attributes={ attributes }
 					setAttributes={ setAttributes }
 					deviceType={ this.getDeviceType() }
