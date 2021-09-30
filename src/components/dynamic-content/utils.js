@@ -40,6 +40,14 @@ const getContent = ( staticContent, props ) => {
 			return metaFieldName && dynamicData.meta[ metaFieldName ] ? dynamicData.meta[ metaFieldName ] : __( 'Post meta', 'generateblocks' );
 		}
 
+		if ( 'term-meta' === dynamicContentType ) {
+			return __( 'Term meta', 'generateblocks' );
+		}
+
+		if ( 'author-meta' === dynamicContentType ) {
+			return __( 'Author meta', 'generateblocks' );
+		}
+
 		if ( 'terms' === dynamicContentType ) {
 			return __( 'List of terms', 'generateblocks' );
 		}

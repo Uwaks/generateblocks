@@ -56,6 +56,12 @@ class GenerateBlocks_Dynamic_Data {
 
 				case 'post-meta':
 					return self::get_post_meta( $attributes );
+
+				case 'term-meta':
+					return self::get_term_meta( $attributes );
+
+				case 'author-meta':
+					return self::get_author_meta( $attributes );
 			}
 		}
 	}
@@ -243,6 +249,40 @@ class GenerateBlocks_Dynamic_Data {
 	}
 
 	/**
+	 * Get the requested term meta.
+	 *
+	 * @param array $attributes The block attributes.
+	 */
+	public static function get_term_meta( $attributes ) {
+		if ( isset( $attributes['metaFieldName'] ) ) {
+			return get_term_meta( self::get_source_id( $attributes ), $attributes['metaFieldName'], true );
+		}
+	}
+
+	/**
+	 * Get the requested author meta.
+	 *
+	 * @param array $attributes The block attributes.
+	 */
+	public static function get_author_meta( $attributes ) {
+		if ( isset( $attributes['metaFieldName'] ) ) {
+			$id = self::get_source_id( $attributes );
+
+			if ( ! $id ) {
+				return;
+			}
+
+			$author_id = get_post_field( 'post_author', $id );
+
+			if ( ! $author_id ) {
+				return;
+			}
+
+			return self::get_user_data( $author_id, $attributes['metaFieldName'] );
+		}
+	}
+
+	/**
 	 * Get our source ID.
 	 *
 	 * @param array $attributes The block attributes.
@@ -254,6 +294,10 @@ class GenerateBlocks_Dynamic_Data {
 
 		if ( 'current-post' !== $attributes['dynamicSource'] && isset( $attributes['postId'] ) ) {
 			return absint( $attributes['postId'] );
+		}
+
+		if ( ! is_singular() ) {
+			return get_queried_object_id();
 		}
 
 		return get_the_ID();

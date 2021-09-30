@@ -1,12 +1,12 @@
 import { __ } from '@wordpress/i18n';
 import AdvancedSelect from '../../advanced-select';
-	import { withSelect, getSelectors } from '@wordpress/data';
+import { withSelect, getSelectors } from '@wordpress/data';
 
 const normalizePostMetadata = ( postMetadata ) => Object
 	.keys( postMetadata )
 	.map( ( meta ) => ( { value: meta, label: meta } ) );
 
-const SelectPostMetaField = ({ postId, onChange, postMeta } ) => {
+const SelectPostMetaField = ( { postId, onChange, postMeta } ) => {
 	const options = normalizePostMetadata( postMeta );
 	const value = options.filter( ( option ) => ( option.value === postId ) );
 
@@ -29,6 +29,6 @@ export default withSelect( ( select, ownProps ) => {
 	const postMeta = postObject.meta || {};
 
 	return {
-		postMeta
+		postMeta,
 	};
 } )( SelectPostMetaField );

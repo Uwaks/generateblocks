@@ -102,6 +102,14 @@ export default ( { attributes, setAttributes } ) => {
 						/>
 					}
 
+					{ ( 'term-meta' === dynamicContentType || 'author-meta' === dynamicContentType ) &&
+						<TextControl
+							label={ __( 'Meta field name', 'generateblocks' ) }
+							value={ metaFieldName }
+							onChange={ ( value ) => setAttributes( { metaFieldName: value } ) }
+						/>
+					}
+
 					{ 'post-date' === dynamicContentType &&
 						<>
 							<SelectControl

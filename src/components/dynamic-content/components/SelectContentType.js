@@ -11,6 +11,8 @@ const getOptions = () => {
 		{ value: 'comments-number', label: __( 'Comments number', 'generateblocks' ) },
 		{ value: 'terms', label: __( 'List of terms', 'generateblocks' ) },
 		{ value: 'post-meta', label: __( 'Post meta', 'generateblocks' ) },
+		{ value: 'term-meta', label: __( 'Term meta', 'generateblocks' ) },
+		{ value: 'author-meta', label: __( 'Author meta', 'generateblocks' ) },
 	];
 
 	return applyFilters(
