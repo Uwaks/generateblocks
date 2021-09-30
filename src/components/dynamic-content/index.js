@@ -1,9 +1,10 @@
 import PanelArea from '../panel-area';
 import { __ } from '@wordpress/i18n';
-import { ToggleControl } from '@wordpress/components';
+import { ToggleControl, TextControl } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 import dynamicContentAttributes from './attributes';
 import SelectSource from './components/SelectSource';
+import SelectContentType from './components/SelectContentType';
 import SelectPostType from './components/SelectPostType';
 import SelectPosts from './components/SelectPosts';
 
@@ -15,8 +16,10 @@ export default ( { attributes, setAttributes } ) => {
 	const {
 		hasDynamicContent,
 		dynamicSource,
+		dynamicContentType,
 		postType,
 		postId,
+		metaFieldName,
 	} = attributes;
 
 	return (
@@ -40,18 +43,36 @@ export default ( { attributes, setAttributes } ) => {
 						onChange={ ( option ) => { setAttributes( { dynamicSource: option.value } ) } }
 					/>
 
-					{ dynamicSource === 'post-type' &&
-						<SelectPostType
-							postType={ postType }
-							onChange={ ( option ) => { setAttributes( { postType: option.value } ) } }
-						/>
+					{ 'post-type' === dynamicSource &&
+						<>
+							<SelectPostType
+								postType={ postType }
+								onChange={ ( option ) => setAttributes( { postType: option.value } ) }
+							/>
+
+							{ postType &&
+								<SelectPosts
+									postType={ postType }
+									postId={ postId }
+									onChange={ ( option ) => {
+										setAttributes( { postId: option.value } );
+									} }
+								/>
+							}
+						</>
 					}
 
-					{ postType &&
-						<SelectPosts
-							postType={ postType }
-							postId={ postId }
-							onChange={ ( option ) => { setAttributes( { postId: option.value } ) } }
+					<SelectContentType
+						contentType={ dynamicContentType }
+						onChange={ ( option ) => setAttributes( { dynamicContentType: option.value } ) }
+					/>
+
+					{ 'post-meta' === dynamicContentType &&
+						<TextControl
+							label={ __( 'Post meta name', 'generateblocks' ) }
+							help="Would be cool if this was an auto-populated select."
+							value={ metaFieldName || '' }
+							onChange={ ( value ) => setAttributes( { metaFieldName: value } ) }
 						/>
 					}
 

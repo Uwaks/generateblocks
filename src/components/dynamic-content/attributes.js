@@ -17,5 +17,11 @@ export default {
 	postId: {
 		type: 'string',
 		default: '',
-	}
+	},
+
+	dynamicContentType: {
+		type: 'string',
+		default: '',
+	},
+
 };
