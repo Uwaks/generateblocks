@@ -29,4 +29,8 @@ export default {
 		default: '',
 	},
 
+	metaFieldName: {
+		type: 'string',
+		default: '',
+	},
 };

@@ -29,7 +29,8 @@ import {
 } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { createBlock } from '@wordpress/blocks';
-import hasDynamicContent from "../../hoc/hasDynamicContent";
+import { date } from '@wordpress/date';
+import hasDynamicContent from '../../hoc/hasDynamicContent';
 
 /**
  * Regular expression matching invalid anchor characters for replacement.
@@ -132,7 +133,9 @@ class GenerateBlockHeadline extends Component {
 			setAttributes,
 			onReplace,
 			clientId,
-			dynamicContent,
+			dynamicData,
+			dateFormat,
+			userData,
 		} = this.props;
 
 		const {
@@ -148,6 +151,8 @@ class GenerateBlockHeadline extends Component {
 			hasIcon,
 			removeText,
 			ariaLabel,
+			dynamicContentType,
+			metaFieldName,
 		} = attributes;
 
 		let googleFontsAttr = '';
@@ -185,6 +190,29 @@ class GenerateBlockHeadline extends Component {
 			}
 
 			return block;
+		};
+
+		const getContent = () => {
+			if ( dynamicData ) {
+				if ( 'title' === dynamicContentType && dynamicData.title ) {
+					return dynamicData.title.raw;
+				}
+
+				if ( 'post-date' === dynamicContentType && dynamicData.date ) {
+					return date( dateFormat, dynamicData.date );
+				}
+
+				if ( 'post-author' === dynamicContentType && userData ) {
+					return userData.name;
+				}
+
+				if ( 'post-meta' === dynamicContentType ) {
+					// This only works if the custom field is available in the REST API.
+					return metaFieldName && dynamicData.meta[ metaFieldName ] ? dynamicData.meta[ metaFieldName ] : __( 'Post meta', 'generateblocks' );
+				}
+			}
+
+			return content;
 		};
 
 		return (
@@ -263,7 +291,7 @@ class GenerateBlockHeadline extends Component {
 								<span className="gb-headline-text">
 									<RichText
 										tagName="span"
-										value={ dynamicContent || content }
+										value={ getContent() }
 										onChange={ ( value ) => setAttributes( { content: value } ) }
 										onSplit={ onSplit }
 										onReplace={ onReplace }
@@ -278,7 +306,7 @@ class GenerateBlockHeadline extends Component {
 					{ ! hasIcon && ! removeText &&
 						<RichText
 							tagName="span"
-							value={ dynamicContent || content }
+							value={ getContent() }
 							onChange={ ( value ) => setAttributes( { content: value } ) }
 							onSplit={ onSplit }
 							onReplace={ onReplace }
@@ -317,16 +345,32 @@ export default compose( [
 			};
 		}
 
-		let dynamicContent = undefined;
 		const { getEntityRecord, getUser } = select( 'core' );
 		const { hasDynamicContent, postType, postId } = ownProps.attributes;
-		if ( hasDynamicContent && postType && postId ) {
-			dynamicContent = getEntityRecord( 'postType', postType, postId ).title.raw;
+
+		let dynamicData = '';
+		let dateFormat = '';
+		let userData = '';
+
+		if ( hasDynamicContent ) {
+			if ( postType && postId ) {
+				dynamicData = getEntityRecord( 'postType', postType, postId );
+			}
+
+			if ( getEntityRecord( 'root', 'site' ) ) {
+				dateFormat = getEntityRecord( 'root', 'site' ).date_format;
+			}
+
+			if ( dynamicData && getUser( dynamicData.author ) ) {
+				userData = getUser( dynamicData.author );
+			}
 		}
 
 		return {
 			deviceType: getPreviewDeviceType(),
-			dynamicContent,
+			dynamicData,
+			dateFormat,
+			userData,
 		};
 	} ),
 ] )( GenerateBlockHeadline );
