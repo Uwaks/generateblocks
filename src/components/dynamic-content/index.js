@@ -27,6 +27,9 @@ export default ( { attributes, setAttributes } ) => {
 		termTaxonomy,
 		termSeparator,
 		linkMetaFieldName,
+		noCommentsText,
+		singleCommentText,
+		multipleCommentsText,
 	} = attributes;
 
 	return (
@@ -71,7 +74,23 @@ export default ( { attributes, setAttributes } ) => {
 
 					<SelectContentType
 						contentType={ dynamicContentType }
-						onChange={ ( option ) => setAttributes( { dynamicContentType: option.value } ) }
+						onChange={ ( option ) => {
+							setAttributes( { dynamicContentType: option.value } );
+
+							if ( 'comments-number' === option.value ) {
+								setAttributes( {
+									noCommentsText: __( 'No comments', 'generateblocks' ),
+									singleCommentText: __( '1 comment', 'generateblocks' ),
+									multipleCommentsText: __( '% comments', 'generateblocks' ),
+								} );
+							} else {
+								setAttributes( {
+									noCommentsText: '',
+									singleCommentText: '',
+									multipleCommentsText: '',
+								} );
+							}
+						} }
 					/>
 
 					{ 'post-meta' === dynamicContentType &&
@@ -102,6 +121,28 @@ export default ( { attributes, setAttributes } ) => {
 									onChange={ ( value ) => setAttributes( { dateReplacePublished: value } ) }
 								/>
 							}
+						</>
+					}
+
+					{ 'comments-number' === dynamicContentType &&
+						<>
+							<TextControl
+								label={ __( 'No comments text', 'generateblocks' ) }
+								value={ noCommentsText }
+								onChange={ ( value ) => setAttributes( { noCommentsText: value } ) }
+							/>
+
+							<TextControl
+								label={ __( 'Single comment text', 'generateblocks' ) }
+								value={ singleCommentText }
+								onChange={ ( value ) => setAttributes( { singleCommentText: value } ) }
+							/>
+
+							<TextControl
+								label={ __( 'Multiple comments text', 'generateblocks' ) }
+								value={ multipleCommentsText }
+								onChange={ ( value ) => setAttributes( { multipleCommentsText: value } ) }
+							/>
 						</>
 					}
 

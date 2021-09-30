@@ -43,6 +43,11 @@ const getContent = ( staticContent, props ) => {
 		if ( 'terms' === dynamicContentType ) {
 			return __( 'List of terms', 'generateblocks' );
 		}
+
+		if ( 'comments-number' === dynamicContentType ) {
+			// Possible solution: https://github.com/WordPress/gutenberg/blob/trunk/packages/block-library/src/post-comments-count/edit.js
+			return __( 'Comments number', 'generateblocks' );
+		}
 	}
 
 	return staticContent;

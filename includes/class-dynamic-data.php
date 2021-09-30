@@ -51,6 +51,9 @@ class GenerateBlocks_Dynamic_Data {
 				case 'terms':
 					return self::get_terms( $attributes );
 
+				case 'comments-number':
+					return self::get_comments_number( $attributes );
+
 				case 'post-meta':
 					return self::get_post_meta( $attributes );
 			}
@@ -196,6 +199,39 @@ class GenerateBlocks_Dynamic_Data {
 	}
 
 	/**
+	 * Get the number of comments.
+	 *
+	 * @param array $attributes The block attributes.
+	 */
+	public static function get_comments_number( $attributes ) {
+		$id = self::get_source_id( $attributes );
+
+		if ( ! $id ) {
+			return;
+		}
+
+		if ( ! post_password_required( $id ) && ( comments_open( $id ) || get_comments_number( $id ) ) ) {
+			if ( ! isset( $attributes['noCommentsText'] ) ) {
+				$attributes['noCommentsText'] = __( 'No comments', 'generateblocks' );
+			}
+
+			if ( '' === $attributes['noCommentsText'] && get_comments_number( $id ) < 1 ) {
+				return '';
+			}
+
+			$comments_text = get_comments_number_text(
+				$attributes['noCommentsText'],
+				! empty( $attributes['singleCommentText'] ) ? $attributes['singleCommentText'] : __( '1 comment', 'generateblocks' ),
+				! empty( $attributes['multipleCommentsText'] ) ? $attributes['multipleCommentsText'] : __( '% comments', 'generateblocks' )
+			);
+
+			return $comments_text;
+		} else {
+			return '';
+		}
+	}
+
+	/**
 	 * Get the requested post meta.
 	 *
 	 * @param array $attributes The block attributes.
@@ -256,7 +292,7 @@ class GenerateBlocks_Dynamic_Data {
 			$url = get_author_posts_url( $author_id );
 		}
 
-		if ( 'comments' === $link_type ) {
+		if ( 'comments-area' === $link_type ) {
 			$url = get_comments_link( $id );
 		}
 

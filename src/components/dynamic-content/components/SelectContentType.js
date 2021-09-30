@@ -8,6 +8,7 @@ const getOptions = () => {
 		{ value: 'title', label: __( 'Title', 'generateblocks' ) },
 		{ value: 'post-date', label: __( 'Post date', 'generateblocks' ) },
 		{ value: 'post-author', label: __( 'Post author', 'generateblocks' ) },
+		{ value: 'comments-number', label: __( 'Comments number', 'generateblocks' ) },
 		{ value: 'terms', label: __( 'List of terms', 'generateblocks' ) },
 		{ value: 'post-meta', label: __( 'Post meta', 'generateblocks' ) },
 	];

@@ -63,4 +63,19 @@ export default {
 		type: 'string',
 		default: ', ',
 	},
+
+	noCommentsText: {
+		type: 'string',
+		default: '',
+	},
+
+	singleCommentText: {
+		type: 'string',
+		default: '',
+	},
+
+	multipleCommentsText: {
+		type: 'string',
+		default: '',
+	},
 };
