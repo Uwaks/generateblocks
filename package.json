@@ -18,6 +18,8 @@
 		"url": "https://generateblocks.com/support"
 	},
 	"dependencies": {
+		"@wordpress/core-data": "^4.0.2",
+		"@wordpress/date": "^4.2.1",
 		"classnames": "^2.3.1",
 		"dompurify": "^2.2.8"
 	},
