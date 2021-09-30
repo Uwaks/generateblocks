@@ -79,6 +79,14 @@ class GenerateBlockHeadline extends Component {
 				fontSizePlaceholder: tempFontSizePlaceholder,
 			} );
 		}
+
+		if ( this.props.attributes.hasDynamicContent && this.props.attributes.icon && ! this.props.attributes.dynamicIcon ) {
+			this.props.setAttributes( { dynamicIcon: this.props.attributes.icon } );
+		}
+
+		if ( ! this.props.attributes.hasDynamicContent && this.props.attributes.dynamicIcon ) {
+			this.props.setAttributes( { dynamicIcon: '' } );
+		}
 	}
 
 	getFontSizePlaceholder() {

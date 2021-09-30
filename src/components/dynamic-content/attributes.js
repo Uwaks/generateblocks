@@ -24,4 +24,9 @@ export default {
 		default: '',
 	},
 
+	dynamicIcon: {
+		type: 'string',
+		default: '',
+	},
+
 };
