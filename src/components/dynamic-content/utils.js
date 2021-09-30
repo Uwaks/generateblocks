@@ -12,6 +12,8 @@ const getContent = ( staticContent, props ) => {
 	const {
 		dynamicContentType,
 		metaFieldName,
+		dateType,
+		dateReplacePublished,
 	} = attributes;
 
 	if ( dynamicData ) {
@@ -19,8 +21,14 @@ const getContent = ( staticContent, props ) => {
 			return dynamicData.title.raw;
 		}
 
-		if ( 'post-date' === dynamicContentType && dynamicData.date ) {
-			return date( dateFormat, dynamicData.date );
+		if ( 'post-date' === dynamicContentType ) {
+			if ( ( 'updated' === dateType || dateReplacePublished ) && dynamicData.modified ) {
+				return date( dateFormat, dynamicData.modified );
+			}
+
+			if ( 'published' === dateType && dynamicData.date ) {
+				return date( dateFormat, dynamicData.date );
+			}
 		}
 
 		if ( 'post-author' === dynamicContentType && userData ) {
