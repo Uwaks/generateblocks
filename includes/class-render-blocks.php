@@ -362,6 +362,16 @@ class GenerateBlocks_Render_Block {
 			$output .= '<span class="gb-headline-text">';
 		}
 
+		$dynamic_link = GenerateBlocks_Dynamic_Data::get_dynamic_url( $attributes );
+
+		if ( $dynamic_link ) {
+			$dynamic_content = sprintf(
+				'<a href="%s">%s</a>',
+				$dynamic_link,
+				$dynamic_content
+			);
+		}
+
 		$output .= $dynamic_content;
 
 		if ( ! empty( $settings['dynamicIcon'] ) ) {

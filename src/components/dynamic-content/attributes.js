@@ -24,12 +24,22 @@ export default {
 		default: '',
 	},
 
+	dynamicLinkType: {
+		type: 'string',
+		default: '',
+	},
+
 	dynamicIcon: {
 		type: 'string',
 		default: '',
 	},
 
 	metaFieldName: {
+		type: 'string',
+		default: '',
+	},
+
+	linkMetaFieldName: {
 		type: 'string',
 		default: '',
 	},

@@ -5,6 +5,7 @@ import { addFilter } from '@wordpress/hooks';
 import dynamicContentAttributes from './attributes';
 import SelectSource from './components/SelectSource';
 import SelectContentType from './components/SelectContentType';
+import SelectLinkType from './components/SelectLinkType';
 import SelectPostType from './components/SelectPostType';
 import SelectPosts from './components/SelectPosts';
 import SelectPostMetaField from './components/SelectPostMetaField';
@@ -17,6 +18,7 @@ export default ( { attributes, setAttributes } ) => {
 		hasDynamicContent,
 		dynamicSource,
 		dynamicContentType,
+		dynamicLinkType,
 		postType,
 		postId,
 		metaFieldName,
@@ -24,6 +26,7 @@ export default ( { attributes, setAttributes } ) => {
 		dateReplacePublished,
 		termTaxonomy,
 		termSeparator,
+		linkMetaFieldName,
 	} = attributes;
 
 	return (
@@ -117,6 +120,21 @@ export default ( { attributes, setAttributes } ) => {
 								onChange={ ( value ) => setAttributes( { termSeparator: value } ) }
 							/>
 						</>
+					}
+
+					<SelectLinkType
+						linkType={ dynamicLinkType }
+						contentType={ dynamicContentType }
+						onChange={ ( option ) => setAttributes( { dynamicLinkType: option.value } ) }
+					/>
+
+					{ 'post-meta' === dynamicLinkType &&
+						<SelectPostMetaField
+							postType={ postType }
+							postId={ postId }
+							metaField={ linkMetaFieldName }
+							onChange={ ( option ) => setAttributes( { linkMetaFieldName: option.value } ) }
+						/>
 					}
 
 				</div>
