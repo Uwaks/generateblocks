@@ -33,4 +33,14 @@ export default {
 		type: 'string',
 		default: '',
 	},
+
+	termTaxonomy: {
+		type: 'string',
+		default: 'category',
+	},
+
+	termSeparator: {
+		type: 'string',
+		default: ', ',
+	},
 };

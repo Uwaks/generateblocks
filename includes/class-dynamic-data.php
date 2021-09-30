@@ -48,6 +48,9 @@ class GenerateBlocks_Dynamic_Data {
 				case 'post-author':
 					return self::get_post_author_name( $attributes );
 
+				case 'terms':
+					return self::get_terms( $attributes );
+
 				case 'post-meta':
 					return self::get_post_meta( $attributes );
 			}
@@ -103,6 +106,49 @@ class GenerateBlocks_Dynamic_Data {
 		if ( isset( $author_id ) ) {
 			return get_the_author_meta( 'display_name', $author_id );
 		}
+	}
+
+	/**
+	 * Get a list of terms.
+	 *
+	 * @param array $attributes The block attributes.
+	 */
+	public static function get_terms( $attributes ) {
+		$id = self::get_source_id( $attributes );
+
+		if ( ! $id ) {
+			return;
+		}
+
+		$taxonomy = isset( $attributes['termTaxonomy'] ) ? $attributes['termTaxonomy'] : 'category';
+		$terms = get_the_terms( $id, $taxonomy );
+
+		if ( is_wp_error( $terms ) ) {
+			return;
+		}
+
+		$term_items = array();
+
+		foreach ( (array) $terms as $term ) {
+			if ( ! isset( $term->name ) ) {
+				continue;
+			}
+
+			$term_items[] = sprintf(
+				'<span class="post-term-item term-%2$s">%1$s</span>',
+				$term->name,
+				$term->slug
+			);
+		}
+
+		if ( empty( $term_items ) ) {
+			return '';
+		}
+
+		$sep = isset( $attributes['termSeparator'] ) ? $attributes['termSeparator'] : ', ';
+		$term_output = implode( $sep, $term_items );
+
+		return $term_output;
 	}
 
 	/**

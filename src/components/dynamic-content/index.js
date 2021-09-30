@@ -20,6 +20,8 @@ export default ( { attributes, setAttributes } ) => {
 		postType,
 		postId,
 		metaFieldName,
+		termTaxonomy,
+		termSeparator,
 	} = attributes;
 
 	return (
@@ -74,6 +76,23 @@ export default ( { attributes, setAttributes } ) => {
 							metaField={ metaFieldName }
 							onChange={ ( option ) => setAttributes( { metaFieldName: option.value } ) }
 						/>
+					}
+
+					{ 'terms' === dynamicContentType &&
+						<>
+							<TextControl
+								label={ __( 'Taxonomy', 'generateblocks' ) }
+								help="Would be cool if this was an auto-populated select"
+								value={ termTaxonomy }
+								onChange={ ( value ) => setAttributes( { termTaxonomy: value } ) }
+							/>
+
+							<TextControl
+								label={ __( 'Term separator', 'generateblocks' ) }
+								value={ termSeparator }
+								onChange={ ( value ) => setAttributes( { termSeparator: value } ) }
+							/>
+						</>
 					}
 
 				</div>
