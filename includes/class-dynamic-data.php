@@ -238,16 +238,18 @@ class GenerateBlocks_Dynamic_Data {
 			$url = get_permalink( $id );
 		}
 
-		if ( 'post-meta' === $link_type ) {
-			$url = get_post_meta( $id, $attributes['linkMetaFieldName'], true );
-		}
+		if ( isset( $attributes['linkMetaFieldName'] ) ) {
+			if ( 'post-meta' === $link_type ) {
+				$url = get_post_meta( $id, $attributes['linkMetaFieldName'], true );
+			}
 
-		if ( 'user-meta' === $link_type ) {
-			$url = self::get_user_data( $author_id, $attributes['linkMetaFieldName'] );
-		}
+			if ( 'user-meta' === $link_type ) {
+				$url = self::get_user_data( $author_id, $attributes['linkMetaFieldName'] );
+			}
 
-		if ( 'term-meta' === $link_type ) {
-			$url = get_term_meta( get_queried_object_id(), $attributes['linkMetaFieldName'], true );
+			if ( 'term-meta' === $link_type ) {
+				$url = get_term_meta( get_queried_object_id(), $attributes['linkMetaFieldName'], true );
+			}
 		}
 
 		if ( 'author-archives' === $link_type ) {
