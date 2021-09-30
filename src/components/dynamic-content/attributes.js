@@ -7,5 +7,15 @@ export default {
 	dynamicSource: {
 		type: 'string',
 		default: '',
+	},
+
+	postType: {
+		type: 'string',
+		default: '',
+	},
+
+	postId: {
+		type: 'string',
+		default: '',
 	}
 };

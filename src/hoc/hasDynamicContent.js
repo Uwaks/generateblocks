@@ -1,5 +1,5 @@
 import filterAttributes from '../utils/filter-attributes';
-import DynamicContentControl, { dynamicContentAttributes } from '../components/dynamic-content-control';
+import DynamicContentControl, { dynamicContentAttributes } from '../components/dynamic-content';
 import { Fragment } from '@wordpress/element';
 import { InspectorControls } from '@wordpress/block-editor';
 

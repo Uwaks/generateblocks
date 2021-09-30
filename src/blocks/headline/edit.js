@@ -124,7 +124,10 @@ class GenerateBlockHeadline extends Component {
 			setAttributes,
 			onReplace,
 			clientId,
+			dynamicContent,
 		} = this.props;
+
+		console.log( dynamicContent );
 
 		const {
 			uniqueId,
@@ -254,7 +257,7 @@ class GenerateBlockHeadline extends Component {
 								<span className="gb-headline-text">
 									<RichText
 										tagName="span"
-										value={ content }
+										value={ dynamicContent || content }
 										onChange={ ( value ) => setAttributes( { content: value } ) }
 										onSplit={ onSplit }
 										onReplace={ onReplace }
@@ -269,7 +272,7 @@ class GenerateBlockHeadline extends Component {
 					{ ! hasIcon && ! removeText &&
 						<RichText
 							tagName="span"
-							value={ content }
+							value={ dynamicContent || content }
 							onChange={ ( value ) => setAttributes( { content: value } ) }
 							onSplit={ onSplit }
 							onReplace={ onReplace }
@@ -297,10 +300,12 @@ export default compose( [
 			setPreviewDeviceType( type );
 		},
 	} ) ),
-	withSelect( ( select ) => {
+	withSelect( ( select, ownProps ) => {
 		const {
 			__experimentalGetPreviewDeviceType: getPreviewDeviceType,
 		} = select( 'core/edit-post' ) || false;
+
+		const { getEntityRecord } = select('core');
 
 		if ( ! getPreviewDeviceType ) {
 			return {
@@ -308,8 +313,15 @@ export default compose( [
 			};
 		}
 
+		let dynamicContent = undefined;
+		const { hasDynamicContent, postType, postId } = ownProps.attributes;
+		if ( hasDynamicContent && postType && postId ) {
+			dynamicContent = getEntityRecord( 'postType', postType, postId ).title.raw;
+		}
+
 		return {
 			deviceType: getPreviewDeviceType(),
+			dynamicContent,
 		};
 	} ),
 ] )( GenerateBlockHeadline );

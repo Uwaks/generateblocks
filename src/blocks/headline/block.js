@@ -11,7 +11,7 @@ import transforms from './transforms';
 import deprecated from './deprecated';
 import getIcon from '../../utils/get-icon';
 import withUniqueId from '../../hoc/withUniqueId';
-import dynamicContentAttributes from '../../components/dynamic-content-control/dynamic-content-attributes';
+import dynamicContentAttributes from '../../components/dynamic-content/attributes';
 
 import {
 	__,
