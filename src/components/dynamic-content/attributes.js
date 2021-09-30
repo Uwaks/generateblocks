@@ -6,7 +6,7 @@ export default {
 
 	dynamicSource: {
 		type: 'string',
-		default: '',
+		default: 'current-post',
 	},
 
 	postType: {
