@@ -4,10 +4,11 @@ import AdvancedSelect from '../../advanced-select';
 import { withSelect } from '@wordpress/data';
 
 const normalizePostTypes = ( postTypes ) => postTypes
-		.filter( ( postType ) => ( postType.viewable ) )
-		.reduce( ( result, postType ) => {
-			result.push( { value: postType.slug, label: postType.name } );
-		}, [] );
+	.filter( ( postType ) => ( postType.viewable ) )
+	.reduce( ( result, postType ) => {
+		result.push( { value: postType.slug, label: postType.name } );
+		return result;
+	}, [] );
 
 // Keeping this only for reference for now.
 const getOptions = () => {
