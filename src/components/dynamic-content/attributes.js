@@ -34,6 +34,16 @@ export default {
 		default: '',
 	},
 
+	dateType: {
+		type: 'string',
+		default: 'published',
+	},
+
+	dateReplacePublished: {
+		type: 'boolean',
+		default: false,
+	},
+
 	termTaxonomy: {
 		type: 'string',
 		default: 'category',

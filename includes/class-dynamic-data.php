@@ -43,7 +43,7 @@ class GenerateBlocks_Dynamic_Data {
 					return self::get_post_title( $attributes );
 
 				case 'post-date':
-					return self::get_post_title( $attributes );
+					return self::get_post_date( $attributes );
 
 				case 'post-author':
 					return self::get_post_author_name( $attributes );
@@ -92,7 +92,37 @@ class GenerateBlocks_Dynamic_Data {
 	 * @param array $attributes The block attributes.
 	 */
 	public static function get_post_date( $attributes ) {
-		return get_the_date( '', self::get_source_id( $attributes ) );
+		$id = self::get_source_id( $attributes );
+
+		if ( ! $id ) {
+			return;
+		}
+
+		$updated_time = get_the_modified_time( 'U', $id );
+		$published_time = get_the_time( 'U', $id ) + 1800;
+
+		$post_date = sprintf(
+			'<time class="entry-date published" datetime="%1$s">%2$s</time>',
+			esc_attr( get_the_date( 'c', $id ) ),
+			esc_html( get_the_date( '', $id ) )
+		);
+
+		$is_updated_date = isset( $attributes['dateType'] ) && 'updated' === $attributes['dateType'];
+
+		if ( ! empty( $attributes['dateReplacePublished'] ) || $is_updated_date ) {
+			if ( $updated_time > $published_time ) {
+				$post_date = sprintf(
+					'<time class="entry-date updated-date" datetime="%1$s">%2$s</time>',
+					esc_attr( get_the_modified_date( 'c', $id ) ),
+					esc_html( get_the_modified_date( '', $id ) )
+				);
+			} elseif ( $is_updated_date ) {
+				// If we're showing the updated date but no updated date exists, don't display anything.
+				return '';
+			}
+		}
+
+		return $post_date;
 	}
 
 	/**

@@ -1,6 +1,6 @@
 import PanelArea from '../panel-area';
 import { __ } from '@wordpress/i18n';
-import { ToggleControl, TextControl } from '@wordpress/components';
+import { SelectControl, ToggleControl, TextControl } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 import dynamicContentAttributes from './attributes';
 import SelectSource from './components/SelectSource';
@@ -20,6 +20,8 @@ export default ( { attributes, setAttributes } ) => {
 		postType,
 		postId,
 		metaFieldName,
+		dateType,
+		dateReplacePublished,
 		termTaxonomy,
 		termSeparator,
 	} = attributes;
@@ -76,6 +78,28 @@ export default ( { attributes, setAttributes } ) => {
 							metaField={ metaFieldName }
 							onChange={ ( option ) => setAttributes( { metaFieldName: option.value } ) }
 						/>
+					}
+
+					{ 'post-date' === dynamicContentType &&
+						<>
+							<SelectControl
+								label={ __( 'Date type', 'generateblocks' ) }
+								value={ dateType }
+								options={ [
+									{ value: 'published', label: __( 'Published', 'generateblocks' ) },
+									{ value: 'updated', label: __( 'Updated', 'generateblocks' ) },
+								] }
+								onChange={ ( value ) => setAttributes( { dateType: value } ) }
+							/>
+
+							{ 'published' === dateType &&
+								<ToggleControl
+									label={ __( 'Replace with updated date', 'generateblocks' ) }
+									checked={ !! dateReplacePublished }
+									onChange={ ( value ) => setAttributes( { dateReplacePublished: value } ) }
+								/>
+							}
+						</>
 					}
 
 					{ 'terms' === dynamicContentType &&
