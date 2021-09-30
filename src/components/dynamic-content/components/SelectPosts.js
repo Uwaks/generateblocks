@@ -11,7 +11,7 @@ const SelectPosts = ( { postId, onChange, posts } ) => {
 	return (
 		<AdvancedSelect
 			id={ 'gblocks-select-posts' }
-			label={ __( 'Select posts', 'generateblocks' ) }
+			label={ __( 'Source post', 'generateblocks' ) }
 			placeholder={ __( 'Select posts', 'generateblocks' ) }
 			options={ options }
 			value={ value }
@@ -26,5 +26,4 @@ export default withSelect( ( select, ownProps ) => {
 	return {
 		posts: getEntityRecords( 'postType', ownProps.postType, {} ) || [],
 	};
-
 } )( SelectPosts );

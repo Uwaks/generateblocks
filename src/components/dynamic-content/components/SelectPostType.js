@@ -7,7 +7,6 @@ const normalizePostTypes = ( postTypes ) => postTypes
 		.filter( ( postType ) => ( postType.viewable ) )
 		.reduce( ( result, postType ) => {
 			result.push( { value: postType.slug, label: postType.name } );
-			return result;
 		}, [] );
 
 // Keeping this only for reference for now.
@@ -32,8 +31,8 @@ const SelectPostType = ( { postType, onChange, postTypes } ) => {
 	return (
 		<AdvancedSelect
 			id={ 'gblocks-select-post-type' }
-			label={ __( 'Select post type', 'generateblocks' ) }
-			placeholder={ 'Select post type' }
+			label={ __( 'Source post type', 'generateblocks' ) }
+			placeholder={ __( 'Select source post type', 'generateblocks' ) }
 			options={ options }
 			value={ value }
 			onChange={ onChange }

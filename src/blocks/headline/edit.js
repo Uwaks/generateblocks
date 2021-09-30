@@ -135,8 +135,6 @@ class GenerateBlockHeadline extends Component {
 			dynamicContent,
 		} = this.props;
 
-		console.log( dynamicContent );
-
 		const {
 			uniqueId,
 			anchor,
@@ -313,8 +311,6 @@ export default compose( [
 			__experimentalGetPreviewDeviceType: getPreviewDeviceType,
 		} = select( 'core/edit-post' ) || false;
 
-		const { getEntityRecord } = select('core');
-
 		if ( ! getPreviewDeviceType ) {
 			return {
 				deviceType: null,
@@ -322,6 +318,7 @@ export default compose( [
 		}
 
 		let dynamicContent = undefined;
+		const { getEntityRecord, getUser } = select( 'core' );
 		const { hasDynamicContent, postType, postId } = ownProps.attributes;
 		if ( hasDynamicContent && postType && postId ) {
 			dynamicContent = getEntityRecord( 'postType', postType, postId ).title.raw;

@@ -31,8 +31,8 @@ export default ( { attributes, setAttributes } ) => {
 			<div style={ { marginTop: '12px', marginBottom: '24px' } }>
 				<ToggleControl
 					label={ __( 'Enable dynamic content', 'generateblocks' ) }
-					checked={ hasDynamicContent }
-					onChange={ ( hasDynamicContent ) => setAttributes( { hasDynamicContent } ) }
+					checked={ !! hasDynamicContent }
+					onChange={ ( value ) => setAttributes( { hasDynamicContent: value } ) }
 				/>
 			</div>
 
@@ -40,7 +40,7 @@ export default ( { attributes, setAttributes } ) => {
 				<div>
 					<SelectSource
 						source={ dynamicSource }
-						onChange={ ( option ) => { setAttributes( { dynamicSource: option.value } ) } }
+						onChange={ ( option ) => setAttributes( { dynamicSource: option.value } ) }
 					/>
 
 					{ 'post-type' === dynamicSource &&
