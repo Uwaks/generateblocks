@@ -15,7 +15,7 @@ export default {
 	},
 
 	postId: {
-		type: 'string',
+		type: 'number',
 		default: '',
 	},
 
