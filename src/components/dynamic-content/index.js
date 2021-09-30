@@ -60,3 +60,23 @@ export default ( { attributes, setAttributes } ) => {
 
 	);
 };
+
+function disableRichTextFormatting( disable, props ) {
+	if ( 'undefined' !== typeof props.attributes.hasDynamicContent && props.attributes.hasDynamicContent ) {
+		return true;
+	}
+
+	return disable;
+}
+
+addFilter(
+	'generateblocks.editor.headlineDisableFormatting',
+	'gp-premium/dynamic-headline/disable-headline-formatting',
+	disableRichTextFormatting
+);
+
+addFilter(
+	'generateblocks.editor.buttonDisableFormatting',
+	'gp-premium/dynamic-headline/disable-button-formatting',
+	disableRichTextFormatting
+);
