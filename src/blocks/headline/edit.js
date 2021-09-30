@@ -29,8 +29,8 @@ import {
 } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { createBlock } from '@wordpress/blocks';
-import { date } from '@wordpress/date';
 import hasDynamicContent from '../../hoc/hasDynamicContent';
+import { getContent } from '../../components/dynamic-content/utils';
 
 /**
  * Regular expression matching invalid anchor characters for replacement.
@@ -133,16 +133,12 @@ class GenerateBlockHeadline extends Component {
 			setAttributes,
 			onReplace,
 			clientId,
-			dynamicData,
-			dateFormat,
-			userData,
 		} = this.props;
 
 		const {
 			uniqueId,
 			anchor,
 			className,
-			content,
 			element,
 			fontFamily,
 			googleFont,
@@ -151,8 +147,7 @@ class GenerateBlockHeadline extends Component {
 			hasIcon,
 			removeText,
 			ariaLabel,
-			dynamicContentType,
-			metaFieldName,
+			content,
 		} = attributes;
 
 		let googleFontsAttr = '';
@@ -190,29 +185,6 @@ class GenerateBlockHeadline extends Component {
 			}
 
 			return block;
-		};
-
-		const getContent = () => {
-			if ( dynamicData ) {
-				if ( 'title' === dynamicContentType && dynamicData.title ) {
-					return dynamicData.title.raw;
-				}
-
-				if ( 'post-date' === dynamicContentType && dynamicData.date ) {
-					return date( dateFormat, dynamicData.date );
-				}
-
-				if ( 'post-author' === dynamicContentType && userData ) {
-					return userData.name;
-				}
-
-				if ( 'post-meta' === dynamicContentType ) {
-					// This only works if the custom field is available in the REST API.
-					return metaFieldName && dynamicData.meta[ metaFieldName ] ? dynamicData.meta[ metaFieldName ] : __( 'Post meta', 'generateblocks' );
-				}
-			}
-
-			return content;
 		};
 
 		return (
@@ -291,7 +263,7 @@ class GenerateBlockHeadline extends Component {
 								<span className="gb-headline-text">
 									<RichText
 										tagName="span"
-										value={ getContent() }
+										value={ getContent( content, this.props ) }
 										onChange={ ( value ) => setAttributes( { content: value } ) }
 										onSplit={ onSplit }
 										onReplace={ onReplace }
@@ -306,7 +278,7 @@ class GenerateBlockHeadline extends Component {
 					{ ! hasIcon && ! removeText &&
 						<RichText
 							tagName="span"
-							value={ getContent() }
+							value={ getContent( content, this.props ) }
 							onChange={ ( value ) => setAttributes( { content: value } ) }
 							onSplit={ onSplit }
 							onReplace={ onReplace }
