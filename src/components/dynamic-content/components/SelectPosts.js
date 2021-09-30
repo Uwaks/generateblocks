@@ -24,6 +24,6 @@ export default withSelect( ( select, ownProps ) => {
 	const { getEntityRecords } = select( 'core' );
 
 	return {
-		posts: getEntityRecords( 'postType', ownProps.postType, {} ) || [],
+		posts: getEntityRecords( 'postType', ownProps.postType, { per_page: -1 } ) || [],
 	};
 } )( SelectPosts );
