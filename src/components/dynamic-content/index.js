@@ -1,6 +1,7 @@
 import PanelArea from '../panel-area';
 import { __ } from '@wordpress/i18n';
 import { ToggleControl } from '@wordpress/components';
+import { addFilter } from '@wordpress/hooks';
 import dynamicContentAttributes from './attributes';
 import SelectSource from './components/SelectSource';
 import SelectPostType from './components/SelectPostType';
