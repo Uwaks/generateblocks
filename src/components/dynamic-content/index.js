@@ -7,7 +7,7 @@ import SelectSource from './components/SelectSource';
 import SelectContentType from './components/SelectContentType';
 import SelectPostType from './components/SelectPostType';
 import SelectPosts from './components/SelectPosts';
-
+import SelectPostMetaField from './components/SelectPostMetaField';
 export {
 	dynamicContentAttributes,
 };
@@ -68,11 +68,11 @@ export default ( { attributes, setAttributes } ) => {
 					/>
 
 					{ 'post-meta' === dynamicContentType &&
-						<TextControl
-							label={ __( 'Post meta name', 'generateblocks' ) }
-							help="Would be cool if this was an auto-populated select."
-							value={ metaFieldName || '' }
-							onChange={ ( value ) => setAttributes( { metaFieldName: value } ) }
+						<SelectPostMetaField
+							postType={ postType }
+							postId={ postId }
+							metaField={ metaFieldName }
+							onChange={ ( option ) => setAttributes( { metaFieldName: option.value } ) }
 						/>
 					}
 
