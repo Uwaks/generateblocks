@@ -82,6 +82,14 @@ class GenerateBlocks_Render_Block {
 				'render_callback' => array( $this, 'do_headline_block' ),
 			)
 		);
+
+		register_block_type(
+			'generateblocks/query-loop',
+			array(
+				'title' => esc_html__( 'Query Loop', 'generateblocks' ),
+				'render_callback' => array( $this, 'do_query_loop_block' ),
+			)
+		);
 	}
 
 	/**
@@ -384,6 +392,44 @@ class GenerateBlocks_Render_Block {
 		);
 
 		return $output;
+	}
+
+	/**
+	 * Output the dynamic aspects of our Container block.
+	 *
+	 * @since 1.2.0
+	 * @param array  $attributes The block attributes.
+	 * @param string $content The inner blocks.'
+	 * @param object $block The block data.
+	 */
+	public function do_query_loop_block( $attributes, $content, $block ) {
+		$the_query = new WP_Query(
+			array(
+				'post_type' => 'post',
+				'posts_per_page' => 10,
+			)
+		);
+
+		$content = '';
+		if ( $the_query->have_posts() ) {
+			while ( $the_query->have_posts() ) {
+				$the_query->the_post();
+
+				$block_content = (
+					new WP_Block(
+						$block->parsed_block,
+						array(
+							'postType' => get_post_type(),
+							'postId'   => get_the_ID(),
+						)
+					)
+				)->render( array( 'dynamic' => false ) );
+
+				$content .= $block_content;
+			}
+		}
+
+		return $content;
 	}
 }
 

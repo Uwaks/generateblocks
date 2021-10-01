@@ -1,0 +1,17 @@
+{
+	"apiVersion": 2,
+	"name": "generateblocks/query-loop",
+	"title": "Query Loop",
+	"category": "generateblocks",
+	"description": "Introduce new sections and organize content to help visitors (and search engines) understand the structure of your content.",
+	"keywords": [ "query", "generate", "generateblocks" ],
+	"textdomain": "generateblocks",
+	"attributes": {
+
+	},
+	"supports": {
+		"align": false,
+		"anchor": true,
+		"className": true
+	}
+}
